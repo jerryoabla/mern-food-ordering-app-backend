@@ -1,0 +1,829 @@
+Build & Launch an Enterprise-Level Food Ordering Platform: React Node.js MongoDB Auth Stripe & More! by Chris Blakely
+https://www.youtube.com/watch?v=ardeKHEN1j4&list=PLpqzh5WzNpRmEH0a62_RDmC1DYvbVfVmT&index=31
+Frontend: https://github.com/chrisblakely01/mern-food-ordering-app-frontend
+Backend: https://github.com/chrisblakely01/mern-food-ordering-app-backend/tree/main
+Course Resources: https://github.com/chrisblakely01/mern-food-ordering-app-course-resources/tree/main
+
+npm run dev => to run the program 
+
+create folder MERN-FOOD-ORDERING-APP 
+create subfolder backend
+open terminal cd to backend
+npm init -y => it will give us package.json file -y flag set default package.json 
+npm i express cors dotenv mongodb mongoose => install package dependencies, express use on the backend to handle api requests, cors for security not to accept request from different domain, 
+npm i ts-node typescript nodemon @types/express @types/cors @types/node --save-dev => --save-dev dev dependencies create a separate section in package.json
+npm uninstall <package-name> => to uninstall the package
+in package.json change main source to "./src/index.ts"
+in package.json delete test and replace with "dev": "nodemon"
+npx tsc --init => create tsconfig.json
+add src folder in the backend directory create index.ts file
+
+https://ui.shadcn.com/ => component library for frontend https://github.com/shadcn-ui/ui
+In terminal move back to root directory
+https://ui.shadcn.com/docs/installation/vite => shadcn installation guide for vite 
+Create a new React project using vite => Start by creating a new React project using vite:
+  npm create vite@latest
+  Project name: frontend => it will create frontend folder
+  Select React > TypeScript
+  cd frontend
+  npm install => install all dependencies
+  npm run dev => to test run 
+Add Tailwind and its configuration => Install tailwindcss and its peer dependencies, then generate your tailwind.config.js and postcss.config.js files:
+  npm install -D tailwindcss postcss autoprefixer
+  npx tailwindcss init -p => initialized tailwindcss
+  check frontend folder if tailwind.config.js and postcss.config.js files are there
+Edit tsconfig.json file => Add the following code to the tsconfig.json file to resolve paths:
+  copy and paste this right below "complierOptions:
+  "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+Update vite.config.ts => Add the following code to the vite.config.ts so your app can resolve paths without error
+  import path from "path"
+  import react from "@vitejs/plugin-react"
+  import { defineConfig } from "vite"
+  
+  export default defineConfig({
+    plugins: [react()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+  })
+
+  npm i -D @types/node => to resolve path and _dirname error
+Run the CLI => Run the shadcn-ui init command to setup your projec
+  npx shadcn-ui@latest init
+  New York => style to use
+  Slate => color
+  src/global.css => where is your global CSS file
+  yes => use css variables for colors
+  hit enter for => Are you using a custom tailwind prefix
+  hit enter for => Where is your tailwind.config.js located? tailwind.config.js
+  hit enter for => Configure the import alias for components: » @/components
+  hit enter for => Configure the import alias for utils: » @/lib/utils
+  no => Are you using React Server Components?
+  y => Write configuration to components.json. Proceed? » (Y/n)
+  check frontend folder > src there should be components folder and global.css file 
+That's it => You can now start adding components to your project.
+  npx shadcn-ui@latest add button => This command will add the Button component to your project. 
+  if you check frontend > src > components => ui folder is added and button.tsx
+  Open App.tsx delete everything inside the return statement and paste below code 
+  <Button>Click Me</Button>
+  import { Button } from './components/ui/button' => import
+  npm  run dev => to test click me button
+
+backend > src > index.ts => entry point for database server
+
+as string => in mongoose.connect is called casting to force type as string
+
+npm i react-router-dom => popular routing library. Routing is the process of determining what content to display on the screen based on the URL. React Router enables developers to create single-page applications with multiple views without the page refreshing.
+
+frontend > src > main.tsx => main entry point for the app
+
+delete App.css App.tsx index.css in frontend > src
+
+shadcn sheet component => https://ui.shadcn.com/docs/components/sheet
+  Installation
+    npx shadcn-ui@latest add sheet => after installation you would see sheet.tsx in fronted > src > components > ui folder
+    npm i lucide-react => burger icon 
+shadcn separator => https://ui.shadcn.com/docs/components/separator
+  Installation
+    npx shadcn-ui@latest add separator
+Now that we all have the componets installed go to components folder and create MobileNav.tsx file
+
+variant="ghost" => in frontend > src > components > MainNav.tsx remove some style so we can add on our own 
+
+Adding Hero
+  Download images from https://github.com/chrisblakely01/mern-food-ordering-app-course-resources/tree/main/assets
+  Save images on frontend > src > assets 
+  create Hero.tsx under component 
+  in layout.tsx add <Hero />
+  create pages folder under frontend > src
+Pages 
+  -mt-16 => give a negative margin on top for search area overlapping effect
+  In AppRoutes.tsx replace HOME PAGE TEXT with <HomePage />
+
+1:29:26
+Auth0 => https://auth0.com/
+  signup > account type other then next > click application on the right hand side and then application again > create application "mern-food-ordering-app-frontend" > single page web application > create
+  settings > Application URIs
+    Allowed Callback URLs > http://localhost:5173
+    Allowed Logout URLs > http://localhost:5173
+    Allowed Web Origins > http://localhost:5173
+  Then save changes 
+  npm i @auth0/auth0-react => install auth0 package in frontend folder
+  create auth folder in frontend > src then create file Auth0ProviderWithNavigate.tsx
+Add Auth0ProviderWithNavigate to main.tsx
+Add to MainNav login button to redirect the page to auth0
+
+1:48:49 
+npx shadcn-ui@latest add dropdown-menu => add dropdown menu in with logout button 
+  go to frontend > src > MainNav.tsx 
+  first check if user is authenticated adding isAuthenticated in const { loginWithRedirect, isAuthenticated} = useAuth0();
+  create UsernameMenu.tsx in components folder 
+  
+2:09:30 => Create user in our own database 
+  create schema 
+    create models folder in backend > src 
+    create users.ts in models folder 
+
+2:13:27 create the end point that our frontend is goind to call in order to create the user
+  in backend > src > index.ts declare the end point
+    app.use("/api/my/user", myUserRoute) => //whenever we receive request from /api/my/user it will forward the request to myUserRoute, if the request is post request it will forward to MyUserController it will pass to createCurrentUser function
+  2:14:45 create routes folder in backend > src then create MyUserRoute.ts
+  2:15:42 create contollers folder in backend>src then create MyUserController.ts file
+      // 1. check if the user exists
+      // 2. create the user if it doens't exist
+      // 3. return the user object to the calling client 
+  2:23:31 test api using insomia  
+      POST http://localhost:7000/api/my/user
+      JSON 
+        {
+          "auth0Id": "231221545",
+          "email": "test@test.com"
+        }
+      check mongodb collection and it shoud be there
+
+2:28:09 => Install react query
+  npm i react-query => simplifies data fetching and state management in React applications. It offers a set of hooks and utilities that enable you to manage data from various sources, including REST APIs, GraphQL, or even local state, effortlessly.
+  add query provider to the top level of the app. 
+    go to frontend > main.tsx and add 
+        const queryClient  = new QueryClient({
+          defaultOptions: {
+            queries: {
+              refetchOnWindowFocus: false,
+            },
+          },
+        });
+    2:30:27 enclosed app with <QueryClientProvider></QueryClientProvider> tag => the entire app has access to query react package
+    2:30:53 create apil folder in frontend > src and create MyUserApi.tsx file => contain all the hooks to interact MyUserApi endpoint
+    2:38:14 update onRedirectCallback function in Auth0ProviderWithNavigate.tsx in frontned > src > auth with the following code
+          if(user?.sub && user?.email){
+            createUser{auth0Id: user.sub, email: user.email})
+          }
+    2:40:19 add VITE_API_BASE_URL=http://localhost:7000 in .env file => base url where your backend server start with
+    2:40:45 Test creating user in database 
+        Check chrome dev tool Network > Fetch/XHR > user should create 201 user to mongodb database
+
+2:42:14 Auth0 Access  Token => Logic to secure end user end point, create my user end point so it can only be accessed by user who is logged in and  redirected back to our app(at the moment we can access it openly such us accessing with insomia)
+    2:43:49 since onRedirectCallback in Auth0ProviderWithNavigate.tsx is outside Aouth0Provider we cant get access to the token using auth0 hook, to fix this we need to create new page in frontend > src > pages 
+      create AuthCallbackPage.tsx => this is the page where we redirect the user to, this page will be inside Auth0Provider so we can get accesses to auth0 hook 
+        from Auth0ProviderWithNavigate.tsx cut const { createUser } = useCreateMyUser(); and paste it in AuthCallbackPage.tsx just under useAuth0 hook
+        create useEffect
+        cut if statement from Auth0ProviderWithNavigate onRedirectCallback function the below code
+          createUser({auth0Id: user.sub, email: user.email})
+        to navigate away from AuthCallbackPage to the home page 
+          const navigate = useNavigate(); => import from react-router-dom
+        to make sure that react only run useEffect once(sometimes in render twice)
+          const hasCreatedUser = useRef(false); => what useRef does is store a state value and if the value changes it will not render
+        Add <Route path="auth-callback" element={<AuthCallbackPage />} /> in AppRoutes.tsx 
+        Add navigate("/auth-callback"); in onRedirectCallback that is in Auth0ProviderWithNavigate.tsx
+        2:52:01 Now we need to get the auth token 
+          in frontend > src > api > MyUserApi.tsx 
+            const { getAccessToenSilently } = useAuth0(); in useCreateMyUser function 
+            const accessToken = await getAccessTokenSilently(); in createMyUserRequest function
+            Authorization: `Bearer ${accessToken}`, in headers
+
+2:59:47 Validate Token
+    Delete appState? : AppState, user? : User variable in onRedirectCallback in Auth0ProviderWithNavigate.tsx as we do not need them for now.
+    Delete unused import as it cause in error when deploying app in render 
+    Go to https://manage.auth0.com/dashboard/us/dev-mc0swjpxa0pynspm/apis Applications > APIs create credential to connect to backend API separate to frontend application
+      API name mern-food-ordering-app-api
+      Identifier mern-food-ordering-app-api
+      Signing algorithm to default 
+      Copy jwtCheck variable including the object from quickstart Node.js 
+          export const jwtCheck = auth({
+            audience: 'mern-food-ordering-app-api',
+            issuerBaseURL: 'https://dev-mc0swjpxa0pynspm.us.auth0.com/',
+            tokenSigningAlg: 'RS256',
+          });
+    create new folder middleware in backend > src => handle authentication 
+      3:03:24 create new file in middleware folder auth.ts
+        paste the code copied from the quickstart guide of the auth0 dashboard => you'll get an error message for auth cannot find name but that's ok as we install the following 
+        npm i express-oauth2-jwt-bearer => install to the backend directory, sdk to do auth thing 
+        import auth from import { auth } from "express-oauth2-jwt-bearer";
+        create .env variable for audience this way we could easily change it when we deploy
+          AUTH0_AUDIENCE=mern-food-ordering-app-api
+          AUTH0_ISSUER_BASE_URL=https://dev-mc0swjpxa0pynspm.us.auth0.com/
+        add jwtCheck to MyUserRoute.ts
+          router.post("/", jwtCheck, MyUserController.createCurrentUser) => now we created authenticated backend endpoint
+        To test using insomia, go ahead and start the server and sent a post request it should return 401 error  
+          http://localhost:7000/api/my/user => send this request without the body, response should be UnauthorizedError: Unauthorized
+    To test the frontend we need to the AUDIENCE in frontend > .env file => need to backend audience, extra added security and backend only accept token that it is expecting 
+      VITE_AUTH0_AUDUIENCE=mern-food-ordering-app-api
+      go to frontend > src > auth > Auth0ProviderWithNavigate.tsx
+        3:11:29 const audience = import.meta.env.VITE_AUTH0_AUDUIENCE;
+          then add in return Auth0Provider
+          finally add !audience in if statement => to check if there is an error 
+             if (!domain || !clientId || !redirectUri || !audience) {
+                throw new Error("unable to initialise auth");
+              }
+          Finally test frontend and backend and keep an eye on chrome dev tool network 
+
+3:15:30 Update User Profile API => adding user profile 
+  let's work on the backend first 
+    backend > src > routes > MyUserRoutes.ts => this is where we add the handler and the controller, request to create a user 
+      router.put("/", MyUserController.updateCurrentUser)
+    go to backend > src > controllers > MyUserController.ts => this is where we define handler function for all request
+      3:20:00 create updateCurrentUser function 
+      3:25:05 go to backend > src > middleware > auth.ts => create function to find the user in the database
+        export const jwtParse = async (req: Request, res: Response, next: NextFunction) => {
+
+        };  
+        import {Request, Response, NextFunction} from "express";
+        const { authorization } = req.headers; => get access token from authorizaton header, destructuring authorization from header
+        const token = authorization.split(" ")[1]; => token is the array 1 after Bearer space
+        Now what we have to do is decode the token 
+          in backend root directory 
+            npm i jsonwebtoken => 
+            3:29:21 npm i @types/jsonwebtoken --save-dev  => type of package we just installed, all typescript related stuff to dev dependencies are, parse and decode the token
+              try {
+                const decoded = jwt.decode(token) as jwt.JwtPayLoad;
+
+              } catch (error) {
+                return res.sendStatus(401);
+              }
+            import jwt from "jsonwebtoken"; => import to fix the error jwt above code 
+            const auth0Id = decoded.sub; => get hold of the decoded auth0 Identifier, .sub is just a convention in oath which basically hold the auth0 id of that user
+            const user = await User.findOne({ auth0Id})  then add import from import User from "../models/user";
+            Line of codes below is to append some information about the user who is trying to make a request to the actual request object itself because this request object will get passed on to the handler
+              which is in MyUserController.ts file which we called updateCurrentUser, by adding these to our request it makes it easier to manage our business logic because we could this in the MyUserController
+              itself but there's a lot of logic which will be repeated for every single request Handler function in our code base so it will make harder to understand the business logic, that is why we are doing
+              this in the middlware, we can easily add this stuff to any request that needs it
+              req.auth0Id = auth0Id;
+              req.userId = user._id.toString();
+            Now that we are finished with the middleware logic once we're done we call the next function by saying next telling express that we finished the middleware to carry on what to do next 
+              in this case call the controller handler
+                next();
+            You typescript error for below line it's because we are adding custom property to the the request typescript doesnt understand
+                  req.auth0Id = auth0Id;
+                  req.userId = user._id.toString();
+                What we have to do is extend the type so we can add our property
+                  declare global {
+                    namespace Express{
+                      interface Request{
+                        userId: string;
+                        auth0Id: string;
+                      }
+                    }
+                  }  
+                Add as string to fix the error in req.auth0Id 
+                  req.auth0Id = auth0Id as string;
+            in MyUserController.ts export updateCurrentUser
+            in MyUserRoute.ts add the middleware jwtParse we just created and import
+              router.put("/", jwtParse, MyUserController.updateCurrentUser)
+            then we also need to check if auth is valid that it came from auth0 server by adding jwtCheck function 
+              router.put("/", jwtCheck, jwtParse, MyUserController.updateCurrentUser)
+            then we need  to add validation to the request to check that all necessary fields are there and they are all of the right type
+              add validation.ts in backend > src > middleware => where we put validation logic, we are going to use express package validator 
+                npm i express-validator => 
+                3:386:12 in validation.ts
+                  export const validateMyUserRequest = [
+                    body("name").isString().notEmpty().withMessage("Name must be a string"),                    
+                  ]
+                => it's an array bec we can add a bunch of middleware in 1 variable 
+                import body import { body } from "express-validator";
+                no that we defined our validation logic, we need to middleware to apply this validation logic to the request
+                  const handleValidationErrors = async(req: Request, res: Response, next: NextFunction) => {
+
+                  }
+                import import { Request, Response, NextFunction } from "express";
+                const errors = validationResult(req) then update import for validationResult
+                add handleValidationErrors in validateMyUserRequest logic
+                Add validateMyUserRequest in MyUserRoute.ts then import
+
+3:44:14 User Profile Form => 
+  npx shadcn-ui@latest add form => install shadcn ui form, this will add the form in frontend>src>ui 
+  npx shadcn-ui@latest add input => add input
+  npm i zod => install zod
+  add form folder in frontend>src>form => 
+  add user-profile-form folder in frontend>src>form => the reason is bec for large form with different steps and components we want to group it together
+  3:47:37 create UserProfileForm.tsx in fronted>src>form>user-profile-form
+  in UserProfileForm.tsx create a formSchema    
+    name: z.string().min(1, "name is required"), => min means minimum of 1 character
+  Now that we defined the formSchema, we can create a type that we can use to better access to things like intelisense 
+    type UserFormData = z.infer<typeof formSchema>; => z.infer means is it is using the zod framework to automatically determine the type based on the formSchema
+  Now that we have the schema we can define the actual form component 
+  4:04:47 fronted>src>components => create LoadingButton.tsx in here 
+  4:07:27 in AppRoutes.tsx replace
+    <Route path="/user-profile" element={<Layout><UserProfilePage /></Layout>}/>
+  Now we create UserProfilePage in pages 
+  4:10:29 {showHero && <Hero/>} => frontend>layouts>layout.tsx
+4:15:39 Update User Profile Request => add API hook to call our backend
+  Head over to frontend>src>api MyUserApi.tsx => this is where we put update user hook 
+    export const useUpdateMyUser = () => {
+      const { getAccessTokenSilently } = useAuth0();
+    };
+  4:22:35 jump back to UserProfilePage.tsx
+    const { updateUser, isLoading } = useUpdateMyUser(); => 
+  You may test saving user and it should be saved in database
+
+4:24:57 Toast Notifications 
+  if you go to shadcn/ui components then on the left panel Sonner => this is affect by a Toast
+  npx shadcn-ui@latest add sonner => add sonner in frontend directory
+  once done installing add it to the top level of our app 
+  navigate to main.tsx file just after <AppRoutes /> add <Toaster /> and import from sonner => the reason we put it in the top level as we want it to appear above anything else
+    richColors => color change depending if it is success, error or info message 
+    next is call the toaster whenver the api user request is successful or if its unsuccessful, the best to do this is in MyUserApi.tsx in useUpdateMyUser hook 
+       if(isSucess){
+        toast.success("User profile updated!");
+      }
+    and then import toast from sonner 
+       if (error) {
+          toast.error(error.toString());
+          reset(); // what it does is clear the error state from this request bec we dont want this error toast keep appearing anytime the component rerender for whatever reason
+        } 
+        => this comes with different color 
+        => the reason why we put this in hook bec in large app saving user profile could be anywhere  and can just call the hook instead
+    now we can test our toast
+
+4:30:35 Get User API => add the logic to prepopulate the user profile form with the data they already entered 
+  create an endpoint that let us fetch this data and call this endpoint in the frontend and display the data in our form
+    we will start  by building the api at the backend
+      backend>src>routes>MyUserRoute.ts 
+        router.get("/", jwtCheck, jwtParse, MyUserController.getCurrentUser);
+      backend>src>routes>controllers>MyUserController.ts => this is where our handler go for our business logic 
+        const getCurrentUser = async () => {}
+        => that's pretty much it for the backend stuff 
+    Now we can jump into the frontend and we will create the hook that let's us call this endpoint and then return the user with the component 
+      frontend>src>api>MyUsreApi.tsx => since we added a new route in the backend to the MyUser endpoint, it make sense that we in the frontend fetch function and hooks into the MyUserApi file  
+        export const useGetMyUser = () => {}
+        => now the we got a function that handles a fetch request, we need to add this to usequery stuff 
+          const { data: currentUser, isLoading, error } = useQuery("fetchCurrentUser", getMyUserRequest) => then import the useQuery hook from the react-query package
+        => that's it for our hook now we add it to our UserProfilePage page 
+      frontend>src>pages>UserProfilePage.tsx
+        const { currentUsre, isLoading } = useGetMyUser(); => then import useGetMyUser from @/api/MyUserApi
+         You will get an error Identifier 'isLoading' has already been declared. (6:22) as both of the hooks useGetMyUser() and useUpdateMyUser() are using isLoading variable are the same 
+          what we will do is rename this variable into something meaningful 
+            isLoading: isGetLoading 
+            isLoading: isUpdateLoading
+
+4:43:51 Pre-populate User Form => 
+  currentUser is of any type(explaination at 4:44:18) and may cause an error, we will create types.ts file in frontend>src 
+  now we that type we can add it to MyUserApi 
+    we can define our return type for our fetch request, the way to this is after the async in getMyUserRequest add a colon and add Promise<User> and import from @type
+     4:47:16 const getMyUserRequest = async (): Promise<User> => {}
+    if we go back to UserProfilePage and hover over currentUser type is of User and or undefined(undefined if there is an issue with the fetch request could be bug or of network drops ) we can handle this early 
+     if (!currentUser) {
+        return <span>Unable to load user profile</span>
+      }
+      => this is kind of defensive coding of something happended user will still have access to the nav 
+  Now we can pass our current user to our UserProfileForm 
+    return <UserProfileForm currentUser={currentUser} onSave={updateUser} isLoading={isUpdateLoading}/>; => now you will get an error with currentUser is we havent defined it on our UserProfileForm prop type 
+    ctrl click UserProfileForm to open it 
+      type Props = {
+        currentUser: User;
+        onSave: (userProfileData: UserFormData) => void;
+        isLoading: boolean;
+      } 
+      then import User from @types
+    and now we are passing currentUser to UserProfileForm in UserProfileForm we need to destructure all the props if you ctrl space intelisense will show currentUser 
+      then add defaultValues: currentUser
+      4:50:34 then next thing we are going to do if the component update we need to make sure that the currentUser updating the form again. if the components rerender and the current user changes
+        then it is goind to call the rest function on the form 
+          useEffect(()=>{
+            form.reset(currentUser);
+          }, [currentUser, form]); 
+  That's it what we can do now is try in our browser 
+
+4:52:12 Protect User Profile Route => if you logout and navigate back to /user-profile it will show loading and eventually unable to load user profile bad for user experience and costing a bit of performance
+  we will add protection on the frontend for protected route only logged user has access 
+  go to frontend>src>auth and add a new file ProtectedRoute.tsx 
+    const ProtectedRoute = () => {
+      const { isAuthenticated } = useAuth0();
+    }
+    => if the user is logged in we will allow them to the protected route if not we will redirect them to the homepage 
+      return isAuthenticated ? (<Outlet/>) : (<Navigate/>) => Outlet means render all the child routes of this component if the user is authenticated 
+  That's it for the protected routes then we add it to our AppRoutes.tsx
+    <Route element={<ProtectedRoute />}></Route> //then import ProtectedRoute and paste /user-profile within this tag 
+
+4:57:16 Deployment Overview 
+
+4:59:36 Backend Deployment => the reason that we are deployingh backend first is that the frontend wont work without the backend 
+  go to backend>src>index.ts 
+    add the health end point just above where we defined user end point 
+  then we need to add the things we need for production build 
+    go to backend>tsconfig.json => we need to specify a output directory for when our typesript code gets transpiled or converted into a plain javascript, 
+      5:02:41 inside the "compilerOptions" add
+        "outDir": "./dist", => folder that will hold the distribution, hold the production build
+    go to backend>package.json => we are going to add a build script under "scripts" object 
+      "build": "npm install && npx tsc" => whenever we run the build script it will install all the packages and its going to run the typescript comman which will convert all our typescript code intojavascript
+        the reason why we convert it into javascript is because whenever the servers running and stuff like that it doesnt care about any typescript stuff and it cares about the javascript, typescript is only
+          for developer so that we get access to intellisense and we can catch type errors and bugs earlier but it's quite a heavy package so we strip everything out before we go to production to make our bundle
+          size smaller and to ensure that things execute faster because it's running pure javascript and it doenst have to do all the type checking and things like that so that's why we do this 
+    test if the build script works, in the terminal makesure that your on the backend type 
+      npm run build => when this finish you should see a dist folder in the backend 
+    next define a script that let's start the production build, in package.json right below the build script
+      "start": "node dist/index.js"
+    we can run the production locally, in the terminal type 
+      npm start => you will notice that nodemon is running, it's pure javascript 
+    test in the browser by calling the health endpoint 
+      http://localhost:7000/health
+  
+5:07:53 Backend Github Repo => we need to create a git repository to hold our backend code 
+  got to github.com/new
+    repository name mern-food-ordering-app-backend
+    set to private 
+    then click create repository
+      then scroll down for the instruction 
+        …or create a new repository on the command line
+            echo "# mern-food-ordering-app-backend" >> README.md
+              git init
+              git add README.md
+              git commit -m "first commit"
+              git branch -M main
+              git remote add origin git@github.com:jerryoabla/mern-food-ordering-app-backend.git
+              git push -u origin main
+    you have 2 options HTTPS or SSH but recommend SSH
+    in the backend terminal 
+      git init => create a new repository in our local computer
+      git status => get the status of the repository in our local machines, untracked files are in our local repository and not in github, we dont want to include .env, dist/, node_modules
+      in the explorer you will notice the file name color changed 
+      add .gitignore in the backend directory, then add this 
+        .env
+        dist/ => this will be regenerated when deploying app when running the build script
+        node_modules/
+      git add . => add evrything that has not been added to source control already
+      git status => again it will show all the stuff to be added
+      git commit -m "first commit" => add message to the commit
+      git branch -M main => change the brach from master to main
+      git remote add origin https://github.com/jerryoabla/mern-food-ordering-app-backend.git
+      git push -u origin main
+
+5:15:33 Deploy to Render 
+  go to render.com click New and select Web Service 
+    build and deploy from a Git repository 
+    connect repo with mern-food-ordering-app-backend
+    name: mern-food-ordering-app-backend
+    region: singapore => the closer you are to the service the faster 
+    branch: main 
+    runtime: node 
+    build command: npm run build 
+    start command: npm start
+    add .env variables 
+    advanced>health check path: /health 
+    Then click Create Web Service
+
+5:24:08 Frontend deployment 
+  navigate to github.com/new 
+  Repo name: mern-food-ordering-app-frontend
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin https://github.com/jerryoabla/mern-food-ordering-app-frontend.git
+    git push -u origin main
+  vite added .ignore file already and the build script 
+  git init 
+  add .env in .ignore
+  git status
+  git add .
+  git commit -m "first commit"
+  git branch -M main
+  git remote add origin https://github.com/jerryoabla/mern-food-ordering-app-frontend.git
+  next we need to setup static site on render to deploy our code 
+  go to render dashboard click New + > static site
+  Name: mern-food-ordering-app-frontend
+  Build Command: npm run build
+  Publish directory: ./dist
+  Add environment variables 
+    VITE_API_BASE_URL=https://mern-food-ordering-app-backend-lpjn.onrender.com => would be the render URL for deployed backend 
+    VITE_AUTH0_CALLBACK_URL=https://mern-food-ordering-app-frontend-n4ue.onrender.com => would be the render URL for deployed frontend 
+  Before clicking the Create Static Site we need to go to auth0 to add our VITE_AUTH0_CALLBACK_URL
+    Go to Applications>applications>mern-food-ordering-app-frontend>Settings>Allowed Callback URL> after http://localhost:5173 add a comma then paste https://mern-food-ordering-app-frontend.onrender.com
+    same for Allowed Logouts URL
+    and Allowed Web Origins 
+  Then go back to render then click Create Static 
+  Go to Redirects/Rewrites on the left panel 
+    Source: /*
+    Destination: /index.html 
+    Action: Rewrite 
+      => what this does bec react is a client side library and we are using the react router dome package to manage all the routes , we need to tell render service to send all these requests that we get to our 
+          frontend to the index.html file when this happen this will fireup the javascript in the user's browser it will handle it off the the react router dome package and then the ract router dome package will
+          handle the route and display the giht page based on the path
+    Hit Save Changes 
+    Extra steps to make it work 
+      Updated VITE_AUTH0_CALLBACK_URL to https://mern-food-ordering-app-frontend-n4ue.onrender.com
+      And also updated Auth0 Allowed Callback URL, Allowed Logouts URL and Allowed Web Origins
+      Also udpated mongodb adding backend IP Addresses in Security>Network Access 
+
+FIXED ERROR when refreshing /user-profile it was returning to the home page. Replaced frontend>src>auth>ProtectedRoute.tsx code from github
+
+5:33:19 Manage Restaurant Overview => add functionality to let the user add their own restaurant 
+
+5:35:43 Cloudinary Setup 
+  Login to cloudniary.com in settings icon go to Product Environment
+    Cloud Name and ID is what are we going to need to connect to our node backend 
+  Install cloudinary api sdk in backend folder
+    npm i cloudinary => 
+  Install multer package 
+    npm i multer => what this does whenever we received images as part of form object in api request it would be quite difficult to manage the image property in terms of the binary and types like that 
+  Finally install the types for multer
+    npm i @types/multer                  
+  Go to backend>src>index.ts => to initialize our connection with cloudinary 
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    })
+  Then import cloudinary
+    import { v as cloudinary } from "cloudinary";
+  Get cloudinary name in cloudinary Settings>Product Environtment 
+  Get the Access Key in Settings>Access Key 
+    Click Generate New Access Key 
+    Copy API key and paste in environment variables
+    Copy API Secret key and paste in environment variables
+  Jump back in the terminal and fireup the server, if no error then your good 
+
+5:44:18 Create Restaurant API => we will create route that let the user create their restaurant
+  go to backend>src>routes and create MyRestaurantRoute.ts 
+    const router = express.Router();
+  then import from express
+    import express from "express";
+  router.post("/", MyRestaurantController.createMyRestaurant) // 5:45:42 All post requests that gets to /api/my/restaurant is going to be handled on this file
+  before we add the handler function, we will add the multer middleware, take a new line above the endpoint 
+    const storage = multer.memoryStorage();
+    const  upload = multer({
+      storage: storage, 
+      limits: {
+        fileSize: 5 * 1024 *1024, //5mb
+      },
+    });
+  add import from multer
+  5:47:22 Once we defined the multer settings we can add this middleware to our endpoint
+    router.post("/", upload.single("imageFile"), MyRestaurantController.createMyRestaurant)
+    // what this middleware does anytime we receive post request to /api/my/restaurant it's going to check the request body for a property called imageFile this should be an image and binary form, what's going to happen then multer is going to do some stuff to store the image in memory and then perform some validation as well, so if the image is over 5mb it will automatically send a response back to the frontend telling that the image is too large, after that it will append an image object that we can use in our handler function(MyRestaurantController.createMyRestaurant)
+  5:48:32 Before we create the handler function, we will create the model and schema that we need to store the restaurant data to our database 
+    backend>src>models create restaurant.ts 
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User"} // 5:49:18 create reference to the user document for the user  who is creating this restaurant, what ref means is we are creating the link from this model restaurant.ts to user.ts
+    cuisines: [{type: String, required: true}], // 5:51:12 cuisines is an array of strings as suppose to single string 
+    menuItems: [menuItemSchema], // 5:51:17 we havent created menuItemSchema yet 
+    imageUrl: {type: String, required: true}, //5:51:41 is going to be the URL we get back from cloudinary whenever we upload image for  the restaurant in the request
+    lastUpdated: {type: Date, required: true }, // 5:52:01 this helps with analytics and metrics, extra field to that you can search on to get the most recent restaura
+  5:52:15 Next we need to define menuItemSchema, toward the top of the file just above the restaurantSchema 
+    const menuItemSchema = new mongoose.Schema({
+      name: { type: String, required: true },
+      price: { type: Number, required: true}
+    });
+    // 5:52:46 the reason we this separate because this will create a separate schema for the menu item but it will be embedded in the restaurantSchema 
+        this means that we will get ID generated for each of the menu item which will be helpful whenever we are doing the check out flow later on as we will 
+        be able to pass around the IDs of the menu items that is in a user's basket and we'll be able to easily fetch the menu item data based on that ID
+  5:53:24 at very bottom we will create the model based in our  schema 
+    const Restaurant = mongoose.model("Restaurant", restaurantSchema); // Restaurant is the name of our model and then we pass the schema that we want to link to this model 
+    then 
+    export default Restaurant;
+  Next we will create the controller function for MyRestaurantRoute and this function will interact the restaurant model to add a new restaurant and will handle the upload of the images the cloudinary account 
+      backend>src>controller add a new file MyRestaurantController.ts
+        const createMyRestaurant = async (req: Request, res: Response) => {}
+        then import { Request, Response } from "express";
+        // 5:55:33 Check if user has an existing restaurant in the database, user can only create one user per account 
+        //import Restaurant, userId comes from the request which we get from the token that get sent to use all the api requests
+        // Check the status of the variable
+        // 409 means duplicate there is a record existing already
+        // This for efficiency to catch early if the data is existing so not to perform other task like uploading to cloudniary
+        // 5:57:33 Create  a data URI string  that represents the image that we got in the request 
+        // mimetype if jpeg png
+        // then import cloudinary
+        // add import of the mongoose package
+        //save into the database
+  6:03:31 import MyRestaurantController to MyRestaurantRoute.ts 
+  In MyRestaurantController.ts export default router; and import it in index.ts file
+  6:04:51 Make a test in insomnia if business logic and function is good and can upload an image to cloudinary
+    POST http://localhost:7000/api/my/restaurant
+    Multi Part Form 
+      restaurantName: test restaurant
+      city: asdfasf
+      country: asfasdf
+      deliveryPrice: 150
+      estimatedDeliveryTime: 30
+      cuisines[0]: pasta
+      cuisines[1]: italian
+      menuItems[0][name]: cheese pizza
+      menuItems[0][price]: 1000
+      imageFile: upload any picture
+    Make sure the backend is running
+  6:10:04 FIXED ERROR restaurant is existing even when not in database, solutlion was changing the query from find to findOne bec there should only  be one restaurant for a user and by using fineOne it will return either undefined or null, while find return an array an run the if statement existingRestaurant
+  6:11:07 The last part before we jump into the frontend to add on the middleware to authenticate the actual token that comes in the request and add some validation all fields exist in the request before we run our business logic 
+      Jump in backend>src>routes>MyRestaurantRoute.ts 
+        add and import jwtCheck function from the middleware/auth // to ensure that we got a valid token in the request 
+        then jwtParse //  this tells the information of the current logged in user and pass it onto the request
+        then save
+      6:12:02 go to backend>src>middleware>validation.ts 
+        export const validateMyRestaurantRequest = [] => to ensure that the request has the proper stuff in it 
+      6:16:33 Add validateMyRestaurantRequest to MyRestaurantRoute.ts 
+        then add import from ../middleware/validation
+          in MyRestaurantRoute.ts moved upload.single("imageFile"),  the beginning that means we do all the request stuff first before the validation stuff 
+      So that's it for our endpoint to create a restaurant 
+
+6:17:01 Create Restaurant Form => becasuse this is quite  a complex form we will split each section into their component and see how to link each those components into the form and once we built the form we will add it to the page and we will wire in the api by creating some api hook and some good stuff 
+  Jump to fronted>src>form and create folder manage-restaurant-form
+  in frontend>src>form>manage-restaurant-form create ManageRestaurantForm.tsx then rfcp functional components with some props 
+  first prop would be 
+    onSave: (restaurantFormData: FormData) => void;
+      just like we did with UserProfileForm we are going to have our form in its component and then at the page level where we do our API requests we will pass in the function that calls CreateMyRestaurant api from the page level as an onsave prop so this just makes our form reusable and it splits out the data fetching from the actual form logic and it also mean we can pass in a different save function to call the edit form when we come to create that
+    isLoading: boolean; => when the request is running you will get isLoading prompt and in our form we do what we want of it such as a loading button
+    we will use combination of react hook form and zod to manage the form and run validation, just above Props 
+      const formSchema = z.object({
+
+      })
+    then import from zod 
+      import { z } from "zod";
+      deliveryPrice: z.coerce.number({}), => use the coerce function to convert the string value to a number
+    last thing to do is add validation for image file 
+      imageFile: z.instanceof(File, { message: "image is required" }),
+    Now that we have the formSchema, we need to create a type based on the formSchema. Just below the formSchema
+      type restaurantFormData = z.infer<typeof formSchema> = all it's doing is creating a type based on the properties that we added into our formSchema and based on the type of these properties
+      if you hover over restaurantFormData you will see typescript type and all of our things that we want
+    6:25:47 No we will be adding things to our ManageRestaurantForm
+      const form = useForm<restaurantFormData>({}) // import useForm hook from "react-hook-form"
+      defaultValues: {} // add default values/placeholder, default values for menuItems and cuisines, fall back value in case we dont provide cusines or the list of menuitems  
+      import zodResolver import { zodResolver } from "@hookform/resolvers/zod";
+    6:27:36 That's it, now we have a form object that's being managed by react hook form and validated by zod, what we can do now is add our form component and start adding a field 
+      return(
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}></form>
+        </Form>
+      ) // you have to make sure that you import Form from import { Form } from "@/components/ui/form" as this is a shadcn form field that wraps react hook form under the hood;
+            {...form} => we are just spreading all the form functions and methods and objects and things you get from form hook into the shadcn form so that we can link the two together 
+            so we haven't created the onSubmit function yet,  just above the return statement 
+              const onSubmit = (formDataJson: restaurantFormData) => {} // it's going to accept the validated formData, what this function does is down in our <Form></Form> whenever we submit the form that handles the submit function handleSubmit, the handleSubmit function from react hook form library is going to get called first, what that will do is that it run the zod  validation and all that stuff and if validation passes then it will call the onSubmit function with all the data from the form which we know of type restaurantFormData and if it doesnt passes the validation it will display the error message and all behind the scene, when we get to the onSubmit function we know our form is valid what we do in here is 
+                //TODO - convert formDataJson to a new FormData object so we can submit it along with the image that the user uploaded and send the form data to the backend. We will see this later 
+    6:30:18 For now we will start adding in each of our section for the form what we'll do first is add classess to our Form tag 
+      className="space-y-8 bg-gray-50 p-10 rounded p-10 rounded-lg"
+      6:31:22 in frontend>src>components>form>manage-restaurant-form create a new file DetailsSection.tsx
+        FormDescription //import from "@/components/ui/form"
+        //6:32:51 shadcn form field that get controled by our react hook form library
+          <FormField 
+            control={control}
+            name="restaurantName"
+            render={({ field }) => <FormItem>
+              <FormLabel>Name</FormLabel>
+            </FormItem>}/>
+        // 6:34:50 what we can do is spread the properties that we get from the field so just register the input with the react form library 
+          <Input {...field} className="bg-white"/>
+        The last we need to do is get the control variable so we can tie our FormField into the react hook form, on the top of the component
+          const { control } = useFormContext(); //import useFormContext from react-hook-form
+        That's it whenever we defined the form component({...form} in ManageRestaurantForm.tsx) in the parent in the ManageRestaurantForm.tsx file behind the scenes this Form component uses an app context to pass all the form properties to the child component that's why in the details section we can  use the hook to access that form API context and get some stuff our of it so whenever put the details section in our form it all work together so that's a nice feature of the tech stack that we're going to use because it makes our code nice and clean 
+        //6:36:10 so now we have the FormField for the name now we add for the city and country, we want this field to be side by side so we add a div 
+        //6:38:49 so that's it for DetailsSection now we need to add the error message 
+            add  <FormMessage /> for each input and import from "@/components/ui/form" any message that stored in filed will get rendered in FormMessage tag 
+        No if we jump back to ManageRestaurantForm what we can do is inside the <form></form> insert <DetailsSection /> and then import DetailsSection from "./DetailsSection";
+        //6:40:14 now we have DetailsSection we will render this formm in ManageRestaurantPage.tsx page and add it to the route and see what it looks like in the browser 
+          in frontend>src>pages create a new file ManageRestaurantPage.tsx
+            you will have an error for ManageRestaurantForm it is because we havent passed the onSave and isLoading props but it's ok as we dont still need yet and this will still render on page
+        Now that we have the page go to AppRoutes.tsx 
+          <Route path="/manage-restaurant" element={<Layout><ManageRestaurantPage /></Layout>}/> and import from "./pages/ManageRestaurantPage";
+        The last thing we are going to do is add the link to the menu so we can go to the page easily 
+          frontend>src>components>UsernameMenu.tsx // 
+            <DropdownMenuItem>
+              <Link to="/manage-restaurant" className="font-bold hover:text-oarnge-500">
+                Manage Restaurant
+              </Link>
+            </DropdownMenuItem>
+    6:42:23 if you start up your front end and backend server and navigate to profile name dropdown menu the Manage Restaurant is there 
+      We have a bit of issue is here because City and Country is not taking the full screen what will do is navigate 
+        frontend>src>form>DetailsSection.tsx 
+          add className="flex-1" for the  city and country fields FormItem
+    6:43:45 Next is Cuisines section with checkbox options if you have try to submit the form without selecting one all items will turn red and an error message You have to select atleast one item
+      If you go to ManageRestaurantForm.tsx we will add a <Separator /> right below <DetailsSection> and import { Separator } from "@/components/ui/separator"; // this is to add distinction between in each section and our form 
+      //6:44:37 Next go to frontend>src>form>manage-restaurant-form> and add CuisinesSection.tsx file 
+        const CuisinesSection = () => {
+          const { control } = useFormContext();
+        }
+        export default CuisinesSection;
+        And then import { useFormContext } from "react-hook-form";
+          const { control } = useFormContext(); //getting the control function will help us link our form field to the form
+          return(
+            <div> //what this div do will act as the container for the elements of our cuisines section just to keep those section together 
+              <div>
+                <h2 className="text-2xl font-bold">Cuisines</h2>
+                <FormDescription> //then import { FormDescription } from "@/components/ui/form";
+                  
+                </FormDescription>
+              </div>
+              <FormField control={control} name="cuisines" render={({field})=>( //6:46:13 then import { FormField } from "@/components/ui/form";
+                  <FormItem> 
+                    <div className="grid md:grid-cols-5 gap-1">
+                    </div>
+                  </FormItem>
+              )}/> 
+            </div>
+          )
+          //6:47:04 putting this inside the render function, this will control the entire section if no cuisines selected error message will appear, the top level FormItem
+          control the error message that you have to select at least one item, we will have individual FormItem for each check box so they are tied to the validation as well
+          //6:47:25 back to the code inside FormItem we will use a CSS grid to ensure that we have a 5 columns of cuisine items for the larger screen and for smaller screen we have a           single column 
+              <FormItem> 
+                <div className="grid md:grid-cols-5 gap-1">
+                </div>
+              </FormItem>
+          //6:47:52 the cuisines list options all of the checkboxes are part of the platform and are provided by the platform and not by the user so that means user cant add or edit cusines and they can only choose atleast one option that they want to add to the restaurant so because this is provided by the platform application what we can do is store this value in a configuration file and import it into our form so we jump back into the code 
+            6:48:26 in frontend>src the create config folder
+            the in frontend>src>config create a new file restaurant-options-config.ts
+              export const cuisineList = []
+              grab the list cusines in github https://github.com/chrisblakely01/mern-food-ordering-app-frontend/blob/main/src/config/restaurant-options-config.ts
+              we will use the list to query later on 
+              back in CuisinesSection.tsx 
+                {cuisineList.map()} then import { cuisineList } from "@/config/restaurant-options-config";
+                inside the map function will pass an arrow function in this will give us the current cuisine cuisineItem, what we are going to do is to render 
+                  <CuisineCheckbox /> //now you will get an error because we havent created the CuisineCheckbox yet, it's a component that will hold the actual checkbox input and add the label displaying of that cuisine so there is a few things you need to pass in here we need to pass in the
+                  cuisine={cuisineItem} and we need to pass in the field={field} we need to pass in the field so we can register the inputs and such inside our CusineCheckbox component to the rest of the FormItem
+                Just before we go and create the CusineCheckbox component we will add the error message just after the div we will add 
+                  <FormMessage /> and import, this is going to be the error that will get displayed in the section
+              6:50:55 In frontend>src>form>manage-restaurant-form add CuisineCheckbox.tsx then rfcp(react functional component with props) and then we'll difine our props
+                type Props = {
+                  cuisine: string;
+                  field: ControllerRenderProps<FieldValues, "cuisines">;
+                };
+                and import { ControllerRenderProps, FieldValues } from "react-hook-form";
+                once we have our props defined we can destructure it down in our compoent 
+                  cons CuisineCheckbox = ({ cusine, field}: Props) => {
+                    return(
+                      <FormItem>
+                      </FormItem>
+                    )
+                  }
+                  //6:52:04 so each of the checkboxes inside of the cuisine section is goind to be an idividual FormItem as well and the reason we do this we want to get the nice functionality that happens when the user hasnt selected an option each of this will turn  red and you select one it changes color and error message goes as well, this is why each of this item has to be in each FormItem even through we're inside a FormItem as well so that each of these gets registered as part of the cuisine property on the form 
+              We jump back to CusineCheckbox.tsx and import { FormItem } from "@/components/ui/form";
+                <FormItem className="flex flex-row items-center space-x-1 space-y-0 mt-2">
+                  <FormControl>
+                  </FormControl>
+                </FormItem> 
+                // we are just adding a spacing so that the label and the actual checbox itself are spaced and aligned nicely 
+                //6:53:20 inside the FormItem we are adding <FormControl> and import from "@/components/ui/form"; then we are adding the checkbox from shadcn/ui not the normal checkbox from html so what we need to do is install it, open the terminal and inside the frontend folder 
+                  npx shadcn-ui@latest add checkbox
+                  then add checkbox inside FormControl 
+                    <Checkbox 
+                      className="bg-white"
+                      checked={field.value.includes(cuisine)}
+                    />
+                    //what this does check the field value, so the field value is an array of all the items that the user has selected so far and the cusine is the cuisine for this checkbox see example(simulation) at 6:54:34 
+                      then import { Checkbox } from "@/components/ui/checkbox";
+                    6:55:19 Now that we established if this checkbox is checked or not what we need to do is handle the change 
+                    //The onCheckedChange property is going to pass the new checked value to our function as an argument called checked, so now we just need to do some logic in here to determin to update the field property based on this new value the if else statement. 
+                      
+                        <Checkbox 
+                          className="bg-white"
+                          checked={field.value.includes(cuisine)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              field.onChange([...field.value, cuisine]);
+                            } else {
+                              field.onChange(
+                                field.value.filter((value: string) => value !== cuisine )
+                              );
+                            }
+                          }}
+                        />
+                        //Whenever onCheckedChange happened we got a new checked value which is going to be a boolean now we are checking is new value checked if this is checked then we want to add this cuisine the list of cuisines that the user has already selected and it's creating a new array with the current cusine list that the user has chosen and it's adding the new cusine into the end it's basically taking this new array and setting it as a field value of that field and else is the complete opposite so instead of adding the current cuisine to the field array it's goind to filter out the value from existing array and return that new array without the current cuisine that we are currently on. so the filter function reutnrs an array which is why we dont specify the square bracket in else. Updating the array of cuisines based on if it checked or if it's not checked. So now we got our checked box 
+                    6:58:00 Add FormLabel for checkbox label  
+                    Jump back to CusinesSection.tsx and add the import for CusineCheckbox 
+                    back to ManageRestaurantForm.tsx add CuisineSection just under <Separator>
+          Start your dev server to test the checkbox 
+          6:59:07
+
+                        
+
+
+                        
+
+                      
+        
+
+
+
+
+
+
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      
+
+
+
+
+
